@@ -65,30 +65,22 @@ struct Welcome: View {
                 }
 //                    .padding(.top, -60)
 
-                ZStack (alignment: .top) {
+                VStack (spacing: 0) {
                     Rectangle()
                         .fill(LinearGradient(gradient: Gradient(
                         colors: [
                             Color(red: 1, green: 1, blue: 1, opacity: 0),
-                            Color(red: 1, green: 1, blue: 1, opacity: 0),
-                            Color(red: 1, green: 1, blue: 1, opacity: 0.8),
-                            Color(red: 1, green: 1, blue: 1, opacity: 1),
-                            Color(red: 1, green: 1, blue: 1, opacity: 1),
-                            Color(red: 1, green: 1, blue: 1, opacity: 1),
-                            Color(red: 1, green: 1, blue: 1, opacity: 1),
-                            Color(red: 1, green: 1, blue: 1, opacity: 1),
                             Color(red: 1, green: 1, blue: 1, opacity: 1)]),
                         startPoint: .top, endPoint: .bottom))
-                        .frame(width: .infinity, height: UIScreen.screenHeight / 2, alignment: .top)
-
+                        .frame(width: .infinity, height: 70)
                     VStack (spacing: 0) {
-                        Spacer()
                         Group {
                             Text("Discover NFT Collections")
                                 .font(Font.system(size: 38))
                                 .fontWeight(.bold)
                                 .foregroundColor(Color(red: 0.14901960784313725, green: 0.16470588235294117, blue: 0.1843137254901961))
                                 .multilineTextAlignment(.center)
+                                .padding(.top, 10)
 
                             Spacer().frame(height: 24)
 
@@ -121,7 +113,8 @@ struct Welcome: View {
                         }
                             .padding(.horizontal, 20.0)
                     }
-                        .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)
+                        .frame(width: UIScreen.screenWidth)
+                        .background(Color(red: 1, green: 1, blue: 1))
                 }
             }
         }
