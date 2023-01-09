@@ -101,7 +101,7 @@ struct Welcome: View {
                                     .foregroundColor(.white)
                                     .frame(minWidth: 0, maxWidth: .infinity)
 
-                                Image("leftArrow")
+                                Image("rightArrow1")
                                     .frame(width: 81, height: 74)
                                     .background(.white)
                                     .cornerRadius(54)
