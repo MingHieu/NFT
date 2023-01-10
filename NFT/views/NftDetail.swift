@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct BuyModal: View {
-    let height = 550.0
     @State var yOffset = 0.0
+    @Binding var backgroundImageHeight: CGFloat
     @Binding var isShow: Bool {
         didSet {
             yOffset = 0
         }
+    }
+
+    func closeModal() {
+        isShow = false
+        backgroundImageHeight = UIScreen.screenHeight
     }
 
     var mainView: some View {
@@ -110,13 +115,16 @@ struct BuyModal: View {
                     }
                 }
                     .padding(.vertical, 30)
-                    .padding(.horizontal,40)
+                    .padding(.horizontal, 40)
                     .background(BlurView())
                     .cornerRadius(30)
 
                 Spacer().frame(height: 20)
 
-                Button(action: { withAnimation { isShow = true } }) {
+                Button(action: { withAnimation {
+                    isShow = true
+                    backgroundImageHeight = UIScreen.screenHeight
+                } }) {
                     HStack(alignment: .center) {
                         Image("bag")
                             .resizable()
@@ -152,7 +160,7 @@ struct BuyModal: View {
                 .padding(.horizontal, 20)
                 .frame(maxHeight: .infinity, alignment: .bottomLeading)
         }
-            .frame(height: height)
+            .frame(height: 550)
             .frame(maxWidth: .infinity)
             .background(
             Rectangle()
@@ -174,6 +182,12 @@ struct BuyModal: View {
 
             if yOffset < 0 {
                 yOffset = 0
+
+            }
+
+            backgroundImageHeight += dragAmount
+            if backgroundImageHeight < UIScreen.screenHeight - 500 {
+                backgroundImageHeight = UIScreen.screenHeight - 500
             }
 
             prevDragTranslation = val.translation
@@ -182,9 +196,10 @@ struct BuyModal: View {
             isDraging = false
             prevDragTranslation = .zero
             if yOffset > 150 {
-                isShow = false
+                closeModal()
             } else {
                 yOffset = 0
+                backgroundImageHeight = UIScreen.screenHeight - 500
             }
         }
     }
@@ -193,11 +208,9 @@ struct BuyModal: View {
         ZStack(alignment: .bottom) {
             if isShow {
                 Color.black
-                    .opacity(0.3)
+                    .opacity(0.0001)
                     .ignoresSafeArea()
-                    .onTapGesture {
-                    isShow = false
-                }
+                    .onTapGesture { closeModal() }
                 mainView
                     .transition(.move(edge: .bottom))
             }
@@ -211,15 +224,19 @@ struct BuyModal: View {
 struct NftDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var isShowBuyModal = false;
+    @State var imageHeight = UIScreen.screenHeight
 
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomLeading) {
                 Image("NFTExampleFullscreen")
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight, alignment: .center)
+                    .scaledToFill()
+                    .frame(width: UIScreen.screenWidth, height: imageHeight)
                     .ignoresSafeArea()
+                    .animation(.easeInOut)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+
                 VStack(alignment: .leading, spacing: 0) {
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -336,7 +353,10 @@ struct NftDetail: View {
 
                     Spacer().frame(height: 30)
 
-                    Button(action: { withAnimation { isShowBuyModal = true } }) {
+                    Button(action: { withAnimation {
+                        isShowBuyModal = true
+                        imageHeight = UIScreen.screenHeight - 500
+                    } }) {
                         HStack(alignment: .center) {
                             Image("Hammer")
                                 .resizable()
@@ -368,8 +388,10 @@ struct NftDetail: View {
                     Spacer().frame(height: getSafeAreaInsets()["bottom"])
                 }.padding(.all, 20)
 
-                BuyModal(isShow: $isShowBuyModal)
+                BuyModal(backgroundImageHeight: $imageHeight, isShow: $isShowBuyModal)
             }
+                .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight)
+                .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color(red: 0.796078431372549, green: 0.6666666666666666, blue: 0.7019607843137254)/*@END_MENU_TOKEN@*/)
         }.navigationBarHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
     }
 }
