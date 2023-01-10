@@ -122,8 +122,7 @@ struct BuyModal: View {
                 Spacer().frame(height: 20)
 
                 Button(action: { withAnimation {
-                    isShow = true
-                    backgroundImageHeight = UIScreen.screenHeight
+                    closeModal()
                 } }) {
                     HStack(alignment: .center) {
                         Image("bag")
@@ -170,7 +169,7 @@ struct BuyModal: View {
             .offset(y: yOffset)
     }
 
-    @State private var isDraging = false
+    @Binding var isDraging: Bool
     @State private var prevDragTranslation = CGSize.zero
 
     var dragGesture: some Gesture {
@@ -225,6 +224,7 @@ struct NftDetail: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var isShowBuyModal = false;
     @State var imageHeight = UIScreen.screenHeight
+    @State var isBuyModalDraging = false;
 
     var body: some View {
         NavigationView {
@@ -234,7 +234,7 @@ struct NftDetail: View {
                     .scaledToFill()
                     .frame(width: UIScreen.screenWidth, height: imageHeight)
                     .ignoresSafeArea()
-                    .animation(.easeInOut)
+                    .animation(isBuyModalDraging ? nil : .easeInOut)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
                 VStack(alignment: .leading, spacing: 0) {
@@ -388,7 +388,7 @@ struct NftDetail: View {
                     Spacer().frame(height: getSafeAreaInsets()["bottom"])
                 }.padding(.all, 20)
 
-                BuyModal(backgroundImageHeight: $imageHeight, isShow: $isShowBuyModal)
+                BuyModal(backgroundImageHeight: $imageHeight, isShow: $isShowBuyModal, isDraging: $isBuyModalDraging)
             }
                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight)
                 .background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color(red: 0.796078431372549, green: 0.6666666666666666, blue: 0.7019607843137254)/*@END_MENU_TOKEN@*/)
